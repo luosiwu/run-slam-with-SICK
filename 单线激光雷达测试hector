@@ -1,0 +1,24 @@
+前提是你已经安装过lms1xx的功能包，并能正确的连接到激光可在rviz中调试出激光点云图。
+
+1.安装hector slam功能包。在catkin_ws/src/下使用命令：git clone https://github.com/tu-darmstadt-ros-pkg/hector_slam.git 下载源代码功能包。
+2.  catkin_ws下catkin_make
+3.修改两个文件的代码。
+1）tutorial.launch
+在最后添加
+<node pkg="tf" type="static_transform_publisher" name="map_baselink_broadcaster" args="0 0 0 0 0 0 map base_link 100"/>
+
+<node pkg="tf" type="static_transform_publisher" name="baselink_laser_broadcaster" args="0 0 0 0 0 0 base_link laser 100"/>
+此外，将use_sim_time 设置为'false'
+2）In mapping_default.launch进行如下设置
+
+"map_frame" value="map" 
+
+"base_frame" value="laser" //之前设置base_link出问题
+
+"odom_frame" value="laser" //之前设置base_link出问题
+4.启动以下命令
+一个终端：roscore
+第二个终端：rosrun lms1xx LMS1xx_node
+另一个终端：roslaunch hector_slam_launch tutorial.launch
+5.启动成功即可手持激光进行实时建图啦！
+

@@ -1,0 +1,36 @@
+1.配置ip
+2.启动激光雷达节点rosrun lms1xx LMS1xx_node 
+3.启动cartographer  roslaunch cartographer_ros demo_revo_lds.launch 
+
+注意 需要修改两个文件：
+1）demo_revo_lds.launch
+<launch>
+
+  <param name="/use_sim_time" value="true" />
+
+   <node name="cartographer_node" pkg="cartographer_ros"
+
+      type="cartographer_node" args="
+
+          -configuration_directory $(find cartographer_ros)/configuration_files
+
+          -configuration_basename revo_lds.lua"
+
+      output="screen">
+
+    <remap from="scan" to="scan" />
+
+  </node>
+
+
+
+2)revo_lds.lua
+其中比较关键的是开始的几个frame的设置，网上转载比较多的是
+
+map_frame = "map",
+
+  tracking_frame = "laser",
+
+  published_frame = "laser",
+
+  odom_frame = "odom",
